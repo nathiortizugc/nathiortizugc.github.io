@@ -95,8 +95,16 @@
     }, { threshold: 0.5 });
     nums.forEach(function (n) { n.textContent = '0' + (n.dataset.suffix || ''); io.observe(n); });
   })();
-  // Fill in images; if one is missing, run its fallback (brand name text or nothing)
+  // Images come from files in the same folder; video covers come from YouTube
+  var FILES = {
+    k1: 'photo-hero.jpg', k2: 'photo-about.jpg', k3: 'photo-services.jpg', k24: 'photo-contact.jpg',
+    k18: 'logo-faebea.png', k19: 'logo-gurantang.png', k20: 'logo-dpdp.png',
+    k21: 'logo-nocme.png', k22: 'logo-bianema.png', k23: 'logo-mvave.png'
+  };
   document.querySelectorAll('img[data-k]').forEach(function (im) {
-    var v = (window.IM || {})[im.getAttribute('data-k')];
-    if (v) { im.src = v; } else { im.dispatchEvent(new Event('error')); }
+    var frame = im.closest('.frame');
+    var yt = frame && frame.getAttribute('data-yt');
+    if (yt) { im.src = 'https://i.ytimg.com/vi/' + yt + '/hqdefault.jpg'; return; }
+    var file = FILES[im.getAttribute('data-k')];
+    if (file) { im.src = file; } else { im.dispatchEvent(new Event('error')); }
   });
